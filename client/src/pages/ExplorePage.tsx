@@ -118,17 +118,17 @@ export default function ExplorePage() {
           </div>
         </div>
         
-        {/* Ideas grid - modern portfolio style */}
+        {/* Ideas grid - modern portfolio style with 2 columns and larger blocks */}
         {isLoading ? (
           // Loading state
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {Array(9).fill(0).map((_, index) => (
-              <div key={index} className="aspect-square animate-pulse bg-[#232323] rounded-md"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {Array(6).fill(0).map((_, index) => (
+              <div key={index} className="aspect-[4/5] animate-pulse bg-[#232323] rounded-md"></div>
             ))}
           </div>
         ) : ideas?.length ? (
-          // Masonry-style grid with different sizes
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          // Two-column grid with larger blocks
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {ideas.map((idea, index) => (
               <IdeaCard 
                 key={idea.id} 

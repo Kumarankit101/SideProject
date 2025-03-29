@@ -24,23 +24,23 @@ export default function IdeaCard({ idea, variant = 'default' }: IdeaCardProps) {
   if (variant === 'large') {
     return (
       <div 
-        className="group relative cursor-pointer overflow-hidden rounded-md transition-all duration-700"
+        className="group relative cursor-pointer overflow-hidden rounded-md transition-all duration-700 h-full"
         onClick={navigateToDetail}
       >
         {/* Main image with overlay */}
-        <div className="aspect-square w-full relative overflow-hidden">
+        <div className="aspect-[4/5] w-full relative overflow-hidden">
           <img 
             src={idea.image || "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80"} 
             alt={idea.title}
-            className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110" 
+            className="w-full h-full object-cover transition-all duration-1000 ease-in-out group-hover:scale-125" 
           />
           
           {/* Dark overlay that appears on hover */}
           <div className="absolute inset-0 bg-black/0 transition-all duration-700 group-hover:bg-black/40"></div>
           
-          {/* Title bar that's always visible at the bottom or top depending on design */}
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 text-white">
-            <h3 className="font-bold text-xl mb-1">{idea.title}</h3>
+          {/* Title bar that's always visible at the bottom */}
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-8 text-white transform transition-transform duration-700 group-hover:translate-y-0">
+            <h3 className="font-bold text-2xl mb-3 transform transition-all duration-700 group-hover:translate-x-0 group-hover:text-[#DDF695]">{idea.title}</h3>
             {idea.tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {idea.tags.slice(0, 3).map((tag, index) => (
@@ -59,21 +59,21 @@ export default function IdeaCard({ idea, variant = 'default' }: IdeaCardProps) {
           
           {/* Status indicators for trending/new */}
           {idea.isTrending && (
-            <div className="absolute top-4 right-4 bg-[#DDF695] text-[#171817] text-xs font-bold px-3 py-1 rounded-full">
+            <div className="absolute top-6 right-6 bg-[#DDF695] text-[#171817] text-xs font-bold px-4 py-1.5 rounded-full z-10">
               TRENDING
             </div>
           )}
           {idea.isNew && !idea.isTrending && (
-            <div className="absolute top-4 right-4 bg-white text-[#171817] text-xs font-bold px-3 py-1 rounded-full">
+            <div className="absolute top-6 right-6 bg-white text-[#171817] text-xs font-bold px-4 py-1.5 rounded-full z-10">
               NEW
             </div>
           )}
           
           {/* View details button that appears on hover */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-            <div className="bg-white/90 text-[#171817] rounded-full px-4 py-2 flex items-center gap-2 font-medium text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+            <div className="bg-white/90 text-[#171817] rounded-full px-6 py-3 flex items-center gap-2 font-medium text-base transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700">
               <span>View Details</span>
-              <ExternalLink size={16} />
+              <ExternalLink size={18} />
             </div>
           </div>
         </div>
