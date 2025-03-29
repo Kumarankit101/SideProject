@@ -6,7 +6,11 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export default function HowItWorks() {
   const [_, setLocation] = useLocation();
   const sectionRef = useRef<HTMLDivElement>(null);
+  const leftSideRef = useRef<HTMLDivElement>(null);
+  const leftContentRef = useRef<HTMLDivElement>(null);
+  
   const [activeStep, setActiveStep] = useState(0);
+  const [leftSideStyle, setLeftSideStyle] = useState({});
 
   // For the progress line
   const { scrollYProgress } = useScroll({
@@ -14,19 +18,24 @@ export default function HowItWorks() {
     offset: ["start end", "end start"]
   });
 
-  // Track scroll position to update active step
+  // Handle fixed positioning and scroll behavior
   useEffect(() => {
     const handleScroll = () => {
-      if (!sectionRef.current) return;
+      if (!sectionRef.current || !leftSideRef.current || !leftContentRef.current) return;
       
-      const rect = sectionRef.current.getBoundingClientRect();
-      const scrolledPosition = window.innerHeight - rect.top;
-      const sectionHeight = rect.height;
+      const sectionRect = sectionRef.current.getBoundingClientRect();
+      const leftSideRect = leftSideRef.current.getBoundingClientRect();
+      const leftContentHeight = leftContentRef.current.offsetHeight;
       
-      // Calculate how far we've scrolled through the section (0 to 1)
-      const scrollProgress = Math.max(0, Math.min(1, scrolledPosition / sectionHeight));
+      const windowScrollY = window.scrollY;
+      const sectionTop = windowScrollY + sectionRect.top;
+      const sectionBottom = sectionTop + sectionRect.height;
       
-      // Set the active step based on scroll progress
+      const scrollProgress = Math.max(0, Math.min(1, 
+        (windowScrollY + window.innerHeight / 2 - sectionTop) / sectionRect.height
+      ));
+      
+      // Update active step based on scroll position
       if (scrollProgress < 0.25) {
         setActiveStep(0);
       } else if (scrollProgress < 0.5) {
@@ -36,13 +45,43 @@ export default function HowItWorks() {
       } else {
         setActiveStep(3);
       }
+      
+      // Calculate position for the left side content
+      const headerOffset = 80; // Approx header height
+      
+      if (windowScrollY < sectionTop - headerOffset) {
+        // Before the section: position relative
+        setLeftSideStyle({
+          position: 'relative',
+          top: 0
+        });
+      } else if (windowScrollY >= sectionTop - headerOffset && 
+                windowScrollY <= sectionBottom - leftContentHeight - headerOffset) {
+        // During the section: position fixed
+        setLeftSideStyle({
+          position: 'fixed',
+          top: `${headerOffset}px`,
+          width: leftSideRect.width + 'px'
+        });
+      } else {
+        // After the section: position absolute at the bottom
+        setLeftSideStyle({
+          position: 'absolute',
+          top: `${sectionRect.height - leftContentHeight}px`,
+          width: leftSideRect.width + 'px'
+        });
+      }
     };
     
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Initialize
+    // Call once to set initial position
+    handleScroll();
+    
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
     
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, []);
 
@@ -72,13 +111,18 @@ export default function HowItWorks() {
   return (
     <section 
       ref={sectionRef} 
-      className="py-24 min-h-[100vh] bg-[#171817] relative overflow-hidden"
+      className="py-24 bg-[#171817] relative overflow-hidden"
+      style={{minHeight: "150vh"}}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row gap-16">
-          {/* Left side with sticky positioning */}
-          <div className="md:w-1/2 relative">
-            <div className="sticky top-24 w-full md:max-w-md">
+          {/* Left side with fixed positioning controlled by JS */}
+          <div ref={leftSideRef} className="md:w-1/2 relative">
+            <div 
+              ref={leftContentRef}
+              style={leftSideStyle}
+              className="md:max-w-md z-10"
+            >
               <div className="mb-8">
                 <h4 className="text-[#DDF695] font-medium mb-3">Our Process</h4>
                 <h2 className="text-white text-5xl md:text-6xl font-bold leading-tight">
@@ -112,7 +156,7 @@ export default function HowItWorks() {
           </div>
           
           {/* Right side with steps */}
-          <div className="md:w-1/2 relative">
+          <div className="md:w-1/2 relative min-h-[120vh]">
             {/* Vertical progress line */}
             <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-gray-700"></div>
             
