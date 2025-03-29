@@ -6,48 +6,89 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export default function HowItWorks() {
   const [_, setLocation] = useLocation();
   const sectionRef = useRef<HTMLDivElement>(null);
+  const leftSideRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(0);
-  const [sectionHeight, setSectionHeight] = useState(0);
+  const [sectionBounds, setSectionBounds] = useState({ top: 0, bottom: 0, height: 0 });
 
   // For the progress line
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "end end"]
+    offset: ["start end", "end start"]
   });
 
   useEffect(() => {
-    if (sectionRef.current) {
-      const handleScroll = () => {
-        if (!sectionRef.current) return;
-        
-        const sectionTop = sectionRef.current.getBoundingClientRect().top;
-        const sectionHeight = sectionRef.current.offsetHeight;
-        const windowHeight = window.innerHeight;
-        
-        // Calculate how far we've scrolled into the section
-        const scrolledIntoSection = Math.min(Math.max(0, (windowHeight - sectionTop) / windowHeight), 1);
-        
-        // Set the active step based on scroll position
-        if (scrolledIntoSection < 0.3) {
-          setActiveStep(0);
-        } else if (scrolledIntoSection < 0.5) {
-          setActiveStep(1);
-        } else if (scrolledIntoSection < 0.7) {
-          setActiveStep(2);
-        } else {
-          setActiveStep(3);
-        }
-        
-        // Save the section height for later calculations
-        setSectionHeight(sectionHeight);
-      };
+    const updateSectionBounds = () => {
+      if (!sectionRef.current) return;
       
-      window.addEventListener("scroll", handleScroll);
-      handleScroll(); // Call once to set initial state
+      const rect = sectionRef.current.getBoundingClientRect();
+      const scrollTop = window.scrollY;
+      const top = rect.top + scrollTop;
+      const height = rect.height;
+      const bottom = top + height;
       
-      return () => window.removeEventListener("scroll", handleScroll);
-    }
+      setSectionBounds({ top, bottom, height });
+    };
+
+    updateSectionBounds();
+    window.addEventListener('resize', updateSectionBounds);
+    
+    return () => {
+      window.removeEventListener('resize', updateSectionBounds);
+    };
   }, []);
+
+  useEffect(() => {
+    if (!sectionRef.current || !leftSideRef.current) return;
+
+    const handleScroll = () => {
+      if (!sectionRef.current || !leftSideRef.current) return;
+      
+      const scrollY = window.scrollY;
+      const { top, bottom, height } = sectionBounds;
+      const windowHeight = window.innerHeight;
+      const leftSideHeight = leftSideRef.current.offsetHeight;
+      const headerOffset = 80; // Approximate header height
+      
+      // Calculate the section's progress as user scrolls
+      const sectionProgress = Math.max(0, Math.min(1, (scrollY + windowHeight/2 - top) / (height - windowHeight/2)));
+      
+      // Determine which step is active based on the progress
+      if (sectionProgress < 0.25) {
+        setActiveStep(0);
+      } else if (sectionProgress < 0.5) {
+        setActiveStep(1);
+      } else if (sectionProgress < 0.75) {
+        setActiveStep(2);
+      } else {
+        setActiveStep(3);
+      }
+      
+      // Calculate when the left side should become fixed and when it should stop
+      const leftSide = leftSideRef.current;
+      
+      if (scrollY < top - headerOffset) {
+        // Before the section: position static
+        leftSide.style.position = 'relative';
+        leftSide.style.top = '0px';
+      } else if (scrollY >= top - headerOffset && scrollY <= bottom - leftSideHeight - headerOffset) {
+        // During the section: position fixed
+        leftSide.style.position = 'fixed';
+        leftSide.style.top = `${headerOffset}px`;
+        leftSide.style.width = ''; // Let the parent control the width
+      } else {
+        // After the section: position absolute at the bottom
+        leftSide.style.position = 'absolute';
+        leftSide.style.top = `${height - leftSideHeight}px`;
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initialize positions
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [sectionBounds]);
 
   const steps = [
     {
@@ -79,9 +120,9 @@ export default function HowItWorks() {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row gap-16">
-          {/* Left side (scrolls with the page) */}
-          <div className="md:w-1/2 sticky-parent">
-            <div className="sticky top-32 z-10">
+          {/* Left side (fixed once it reaches the top) */}
+          <div className="md:w-1/2 relative">
+            <div ref={leftSideRef} className="w-full md:w-[calc(50%-32px)]">
               <div className="mb-8">
                 <h4 className="text-[#DDF695] font-medium mb-3">Our Process</h4>
                 <h2 className="text-white text-5xl md:text-6xl font-bold leading-tight">
