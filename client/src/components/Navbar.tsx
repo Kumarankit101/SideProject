@@ -48,9 +48,9 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
             <Link href="/">
-              <a className="flex items-center">
+              <div className="flex items-center cursor-pointer">
                 <Logo />
-              </a>
+              </div>
             </Link>
           </div>
           
@@ -58,9 +58,9 @@ export default function Navbar() {
           <nav className="hidden md:flex space-x-8">
             {navLinks.map((link) => (
               <Link href={link.href} key={link.name}>
-                <a className="relative text-white hover:text-[#ccff00] font-medium transition-colors duration-300 after:content-[''] after:block after:w-0 after:h-0.5 after:bg-[#ccff00] after:transition-all after:duration-300 hover:after:w-full">
+                <div className="relative text-white hover:text-[#ccff00] font-medium transition-colors duration-300 after:content-[''] after:block after:w-0 after:h-0.5 after:bg-[#ccff00] after:transition-all after:duration-300 hover:after:w-full cursor-pointer">
                   {link.name}
-                </a>
+                </div>
               </Link>
             ))}
           </nav>
@@ -103,12 +103,12 @@ export default function Navbar() {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link) => (
               <Link href={link.href} key={link.name}>
-                <a 
-                  className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#2a2a2a] hover:text-[#ccff00] transition-colors duration-300"
+                <div 
+                  className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#2a2a2a] hover:text-[#ccff00] transition-colors duration-300 cursor-pointer"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.name}
-                </a>
+                </div>
               </Link>
             ))}
           </div>

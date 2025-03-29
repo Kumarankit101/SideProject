@@ -6,6 +6,7 @@ import Testimonials from "@/components/Testimonials";
 import CallToAction from "@/components/CallToAction";
 import InvestorsSection from "@/components/InvestorsSection";
 import MovingTextStrip from "@/components/MovingTextStrip";
+import DontBeShySection from "@/components/DontBeShySection";
 
 export default function HomePage() {
   return (
@@ -20,6 +21,7 @@ export default function HomePage() {
         speed="medium"
       />
       <FeaturedIdeas />
+      <DontBeShySection />
       <HowItWorks />
       <Testimonials />
       <CallToAction />
