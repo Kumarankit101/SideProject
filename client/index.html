@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>SideProject.com - Innovate Together</title>
+    <style>
+      :root {
+        --primary: 206 100% 22%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 72 100% 50%;
+        --secondary-foreground: 206 100% 22%;
+        --accent: 4 90% 89%;
+        --accent-foreground: 206 100% 22%;
+      }
+      
+      body {
+        font-family: 'Open Sans', sans-serif;
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Montserrat', sans-serif;
+      }
+      
+      .animate-bounce-slow {
+        animation: bounce 3s ease-in-out infinite;
+      }
+      
+      @keyframes bounce {
+        0%, 100% { 
+          transform: translateY(0); 
+        }
+        50% { 
+          transform: translateY(-10px); 
+        }
+      }
+      
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
