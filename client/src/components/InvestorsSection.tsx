@@ -11,7 +11,7 @@ export default function InvestorsSection() {
   ];
 
   return (
-    <section className="py-16 bg-neutral-900 text-white">
+    <section className="py-16 text-white">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <H2 className="text-white">Backed By Industry Leaders</H2>

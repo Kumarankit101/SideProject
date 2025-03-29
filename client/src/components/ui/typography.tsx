@@ -8,7 +8,7 @@ type TypographyProps = {
 export function H1({ children, className }: TypographyProps) {
   return (
     <h1 className={cn(
-      "text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-primary leading-tight",
+      "text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-white leading-tight",
       className
     )}>
       {children}
@@ -19,7 +19,7 @@ export function H1({ children, className }: TypographyProps) {
 export function H2({ children, className }: TypographyProps) {
   return (
     <h2 className={cn(
-      "text-3xl font-montserrat font-bold text-primary mb-4",
+      "text-3xl font-montserrat font-bold text-white mb-4",
       className
     )}>
       {children}
@@ -30,7 +30,7 @@ export function H2({ children, className }: TypographyProps) {
 export function H3({ children, className }: TypographyProps) {
   return (
     <h3 className={cn(
-      "text-xl font-montserrat font-semibold mb-2",
+      "text-xl font-montserrat font-semibold mb-2 text-white",
       className
     )}>
       {children}
@@ -41,7 +41,7 @@ export function H3({ children, className }: TypographyProps) {
 export function Paragraph({ children, className }: TypographyProps) {
   return (
     <p className={cn(
-      "text-neutral-700",
+      "text-gray-300",
       className
     )}>
       {children}
@@ -52,10 +52,10 @@ export function Paragraph({ children, className }: TypographyProps) {
 export function Logo() {
   return (
     <div className="flex items-center">
-      <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center mr-2">
-        <span className="text-white font-bold font-montserrat text-xl">SP</span>
+      <div className="w-10 h-10 bg-[#ccff00] rounded-lg flex items-center justify-center mr-2">
+        <span className="text-[#171817] font-bold font-montserrat text-xl">SP</span>
       </div>
-      <span className="text-primary font-bold font-montserrat text-xl">
+      <span className="text-white font-bold font-montserrat text-xl">
         SideProject<span className="text-[#ccff00]">.com</span>
       </span>
     </div>

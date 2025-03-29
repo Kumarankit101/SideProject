@@ -25,7 +25,7 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="py-16 bg-neutral-100">
+    <section className="py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <H2>Success Stories</H2>
@@ -36,12 +36,12 @@ export default function Testimonials() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="bg-white rounded-lg shadow-md relative">
-              <div className="absolute -top-4 left-6 w-8 h-8 bg-[#fcccc9] rounded-full flex items-center justify-center">
+            <Card key={index} className="bg-[#1e1e1e] rounded-lg shadow-md relative border-[#333333] border">
+              <div className="absolute -top-4 left-6 w-8 h-8 bg-[#ccff00] rounded-full flex items-center justify-center">
                 <Quote className="h-4 w-4 text-primary" />
               </div>
               <CardContent className="p-6">
-                <p className="text-neutral-600 italic mb-4">{testimonial.quote}</p>
+                <p className="text-white italic mb-4">{testimonial.quote}</p>
                 <div className="flex items-center">
                   <img 
                     src={testimonial.avatar} 
@@ -49,8 +49,8 @@ export default function Testimonials() {
                     className="w-10 h-10 rounded-full mr-3" 
                   />
                   <div>
-                    <h4 className="font-montserrat font-medium text-primary">{testimonial.name}</h4>
-                    <p className="text-xs text-neutral-500">{testimonial.project}</p>
+                    <h4 className="font-montserrat font-medium text-[#ccff00]">{testimonial.name}</h4>
+                    <p className="text-xs text-gray-400">{testimonial.project}</p>
                   </div>
                 </div>
               </CardContent>

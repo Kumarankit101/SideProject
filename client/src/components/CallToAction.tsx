@@ -6,8 +6,8 @@ export default function CallToAction() {
   const [_, setLocation] = useLocation();
 
   return (
-    <section className="py-20 bg-white relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-[#fcccc9] opacity-10 rounded-full -mr-40"></div>
+    <section className="py-20 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-1/2 h-full bg-[#ccff00] opacity-5 rounded-full -mr-40"></div>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-3xl mx-auto text-center">
           <H2 className="text-3xl md:text-4xl mb-6">Ready to Turn Your Idea Into Reality?</H2>

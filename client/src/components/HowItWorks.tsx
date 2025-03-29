@@ -29,8 +29,9 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="py-16 bg-primary text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 relative">
+      <div className="absolute inset-0 bg-[#172541] opacity-30"></div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <H2 className="text-white">How It Works</H2>
           <Paragraph className="max-w-2xl mx-auto opacity-90 text-white">
