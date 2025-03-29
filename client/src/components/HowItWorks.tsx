@@ -1,63 +1,168 @@
-import { H2, Paragraph } from "@/components/ui/typography";
+import { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 export default function HowItWorks() {
   const [_, setLocation] = useLocation();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const [sectionHeight, setSectionHeight] = useState(0);
+
+  // For the progress line
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end end"]
+  });
+
+  useEffect(() => {
+    if (sectionRef.current) {
+      const handleScroll = () => {
+        if (!sectionRef.current) return;
+        
+        const sectionTop = sectionRef.current.getBoundingClientRect().top;
+        const sectionHeight = sectionRef.current.offsetHeight;
+        const windowHeight = window.innerHeight;
+        
+        // Calculate how far we've scrolled into the section
+        const scrolledIntoSection = Math.min(Math.max(0, (windowHeight - sectionTop) / windowHeight), 1);
+        
+        // Set the active step based on scroll position
+        if (scrolledIntoSection < 0.3) {
+          setActiveStep(0);
+        } else if (scrolledIntoSection < 0.5) {
+          setActiveStep(1);
+        } else if (scrolledIntoSection < 0.7) {
+          setActiveStep(2);
+        } else {
+          setActiveStep(3);
+        }
+        
+        // Save the section height for later calculations
+        setSectionHeight(sectionHeight);
+      };
+      
+      window.addEventListener("scroll", handleScroll);
+      handleScroll(); // Call once to set initial state
+      
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
+  }, []);
 
   const steps = [
     {
-      number: 1,
-      title: "Submit Your Idea",
-      description: "Share your side project concept with our community using our simple submission form."
+      week: "Week 1",
+      title: "Idea Submission",
+      description: "Share your side project concept with our community through our simple submission form. Provide details about your vision, target audience, and goals."
     },
     {
-      number: 2,
-      title: "Get Feedback",
-      description: "Receive valuable feedback and suggestions from fellow entrepreneurs and industry experts."
+      week: "Week 2",
+      title: "Community Feedback",
+      description: "Receive valuable insights from fellow entrepreneurs and industry experts. Our community helps refine your concept with honest and constructive feedback."
     },
     {
-      number: 3,
-      title: "Find Collaborators",
-      description: "Connect with potential co-founders, developers, designers, and other specialists."
+      week: "Week 3",
+      title: "Collaboration Matching",
+      description: "Connect with potential co-founders, developers, designers, and specialists who can help bring your vision to life with complementary skills."
     },
     {
-      number: 4,
-      title: "Launch & Grow",
-      description: "Take your project from concept to reality and access resources to help it thrive."
+      week: "Week 4",
+      title: "Launch & Growth",
+      description: "Take your project from concept to reality with our resources. Access mentorship, funding opportunities, and growth strategies to help your side project thrive."
     }
   ];
-
+  
   return (
-    <section className="py-16 relative">
-      <div className="absolute inset-0 bg-[#172541] opacity-30"></div>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
-          <H2 className="text-white">How It Works</H2>
-          <Paragraph className="max-w-2xl mx-auto opacity-90 text-white">
-            Our platform makes it easy to go from idea to implementation in four simple steps.
-          </Paragraph>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step) => (
-            <div key={step.number} className="text-center">
-              <div className="w-16 h-16 bg-[#ccff00] rounded-full flex items-center justify-center mx-auto mb-4">
-                <span className="text-primary text-xl font-bold">{step.number}</span>
+    <section 
+      ref={sectionRef} 
+      className="py-24 min-h-[100vh] bg-[#171817] relative overflow-hidden"
+    >
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row gap-16">
+          {/* Left side (scrolls with the page) */}
+          <div className="md:w-1/2 sticky-parent">
+            <div className="sticky top-32 z-10">
+              <div className="mb-8">
+                <h4 className="text-[#DDF695] font-medium mb-3">Our Process</h4>
+                <h2 className="text-white text-5xl md:text-6xl font-bold leading-tight">
+                  From Idea<br />to Launch
+                </h2>
               </div>
-              <h3 className="font-montserrat font-semibold text-xl mb-2">{step.title}</h3>
-              <p className="opacity-80 text-sm">{step.description}</p>
+              
+              <p className="text-gray-400 mb-8 text-lg max-w-md">
+                We've streamlined the journey from concept to reality with our proven four-week process designed to help entrepreneurs bring their ideas to life.
+              </p>
+              
+              <div className="flex gap-4 mt-12">
+                <Button
+                  variant="glowing"
+                  size="pill"
+                  className="border-[#DDF695]/50 text-[#DDF695] shadow-[0_0_30px_rgba(221,246,149,0.4)] hover:text-white hover:border-white/70"
+                  onClick={() => setLocation("/submit-idea")}
+                >
+                  Start Your Journey
+                </Button>
+                
+                <Button
+                  variant="outline"
+                  className="border-white/30 text-white hover:bg-white/10"
+                  onClick={() => setLocation("/explore")}
+                >
+                  Learn More
+                </Button>
+              </div>
             </div>
-          ))}
-        </div>
-        
-        <div className="text-center mt-16">
-          <Button 
-            className="px-6 py-3 bg-[#ccff00] text-primary font-semibold hover:bg-[#a8cc00] shadow-md"
-            onClick={() => setLocation("/submit")}
-          >
-            Start Your Journey
-          </Button>
+          </div>
+          
+          {/* Right side (fixed position with steps) */}
+          <div className="md:w-1/2 relative">
+            {/* Vertical progress line */}
+            <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-gray-700"></div>
+            
+            {/* Animated progress overlay */}
+            <motion.div 
+              className="absolute left-[11px] top-2 w-0.5 bg-[#DDF695]"
+              style={{ 
+                height: useTransform(scrollYProgress, [0, 1], ['0%', '100%']),
+                originY: 0
+              }}
+            ></motion.div>
+            
+            {/* Steps */}
+            <div className="space-y-28 relative">
+              {steps.map((step, index) => (
+                <div key={index} className="relative pl-12">
+                  {/* Step indicator dot */}
+                  <div 
+                    className={`absolute left-0 top-1.5 w-6 h-6 rounded-full z-10 flex items-center justify-center transition-all duration-500 ${
+                      activeStep >= index 
+                        ? 'bg-[#DDF695]' 
+                        : 'bg-gray-600'
+                    }`}
+                  >
+                    {activeStep > index && (
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#171817]">
+                        <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    )}
+                  </div>
+                  
+                  {/* Step content */}
+                  <div className={`transition-opacity duration-500 ${activeStep === index ? 'opacity-100' : 'opacity-50'}`}>
+                    <div className="text-gray-400 mb-1">{step.week}</div>
+                    <h3 className={`text-2xl font-bold mb-3 transition-colors duration-500 ${
+                      activeStep === index ? 'text-[#DDF695]' : 'text-white'
+                    }`}>
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-400 leading-relaxed">
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
