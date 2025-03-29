@@ -67,11 +67,12 @@ export default function FeaturedIdeas() {
   return (
     <section 
       ref={sectionRef}
-      className="py-16 relative"
+      className="py-16 pb-64 relative" // Added much more bottom padding
       id="featured-ideas-section"
       style={{
         ...calculateStickyEffect(),
         zIndex: 10,
+        transition: 'transform 1.5s ease-out', // Slower, smoother transition
       }}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -116,11 +117,13 @@ export default function FeaturedIdeas() {
               ideas.map((idea, index) => (
                 <div 
                   key={idea.id} 
-                  className="flex-none w-full sm:w-[500px] snap-start relative rounded-lg overflow-hidden cursor-pointer group transition-transform duration-500"
+                  className="flex-none w-full sm:w-[500px] snap-start relative rounded-lg overflow-hidden cursor-pointer group"
                   onClick={() => navigateToIdea(idea.id)}
                   style={{
                     // Each card moves at a slightly different rate for a staggered parallax effect
-                    transform: `translateY(${scrollY * 0.02 * (index % 2 === 0 ? -1 : 1)}px)`,
+                    transform: `translateY(${scrollY * 0.01 * (index % 2 === 0 ? -1 : 1)}px)`,
+                    transition: 'transform 2s ease-out, opacity 1.5s ease-in-out',
+                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)'
                   }}
                 >
                   {/* Image with overlay */}
@@ -128,7 +131,7 @@ export default function FeaturedIdeas() {
                     <img 
                       src={idea.image || "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"} 
                       alt={idea.title} 
-                      className="w-full h-full object-cover opacity-90 group-hover:opacity-70 transition-opacity duration-300" 
+                      className="w-full h-full object-cover opacity-90 group-hover:opacity-70 group-hover:scale-105 transition-all duration-1500 ease-in-out" 
                     />
                     
                     {/* Dark overlay for readability */}

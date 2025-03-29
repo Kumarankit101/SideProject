@@ -56,13 +56,13 @@ export default function DontBeShySection() {
         clipPath: `polygon(0 0, 100% 8rem, 100% 100%, 0 100%)`,
         paddingTop: '12rem',
         zIndex: 30,
-        transition: 'transform 0.1s ease-out',
+        transition: 'transform 1.5s ease-out', // Much slower transition
         ...calculateTransform(),
       }}
     >
       {/* Main content */}
       <div 
-        className={`container mx-auto px-4 sm:px-6 lg:px-8 text-center py-40 transition-all duration-1000 ease-in-out ${
+        className={`container mx-auto px-4 sm:px-6 lg:px-8 text-center py-40 transition-all duration-2000 ease-in-out ${
           animate ? 'opacity-100 transform-none' : 'opacity-0 translate-y-20'
         }`}
       >
@@ -90,27 +90,30 @@ export default function DontBeShySection() {
       
       {/* Decorative elements that slide in and have parallax effect */}
       <div 
-        className={`absolute -left-36 -bottom-36 w-96 h-96 rounded-full bg-[#DDF695]/30 blur-3xl transition-all duration-1000 ${
+        className={`absolute -left-36 -bottom-36 w-96 h-96 rounded-full bg-[#DDF695]/30 blur-3xl transition-all duration-3000 ${
           animate ? 'opacity-100 transform-none' : 'opacity-0 translate-x-20'
         }`}
         style={{
-          transform: `translateY(${scrollY * 0.05}px)`, // Slower parallax for depth
+          transform: `translateY(${scrollY * 0.015}px)`, // Even slower parallax for depth
+          transition: 'transform 2s ease-out, opacity 3s ease-in-out' 
         }}
       ></div>
       <div 
-        className={`absolute right-0 top-1/4 w-80 h-80 rounded-full bg-[#DDF695]/20 blur-3xl transition-all duration-1000 delay-300 ${
+        className={`absolute right-0 top-1/4 w-80 h-80 rounded-full bg-[#DDF695]/20 blur-3xl transition-all duration-3000 delay-700 ${
           animate ? 'opacity-100 transform-none' : 'opacity-0 -translate-x-20'
         }`}
         style={{
-          transform: `translateY(${scrollY * 0.08}px)`, // Medium parallax for depth
+          transform: `translateY(${scrollY * 0.02}px)`, // Slowed down parallax for smoother effect
+          transition: 'transform 2s ease-out, opacity 3s ease-in-out'
         }}
       ></div>
       <div 
-        className={`absolute top-36 left-1/4 w-64 h-64 rounded-full bg-[#DDF695]/25 blur-3xl transition-all duration-1000 delay-500 ${
+        className={`absolute top-36 left-1/4 w-64 h-64 rounded-full bg-[#DDF695]/25 blur-3xl transition-all duration-3000 delay-1000 ${
           animate ? 'opacity-100 transform-none' : 'opacity-0 translate-y-20'
         }`}
         style={{
-          transform: `translateY(${scrollY * 0.03}px)`, // Subtle parallax for depth
+          transform: `translateY(${scrollY * 0.01}px)`, // Very subtle parallax for depth
+          transition: 'transform 2s ease-out, opacity 3s ease-in-out'
         }}
       ></div>
       
