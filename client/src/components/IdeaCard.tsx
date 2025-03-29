@@ -71,9 +71,11 @@ export default function IdeaCard({ idea, variant = 'default' }: IdeaCardProps) {
           
           {/* View details button that appears on hover */}
           <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-            <div className="bg-white/90 text-[#171817] rounded-full px-6 py-3 flex items-center gap-2 font-medium text-base transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700">
-              <span>View Details</span>
-              <ExternalLink size={18} />
+            <div className="relative bg-black/40 text-white border border-white/30 hover:border-[#DDF695]/70 overflow-hidden transition-all duration-500 rounded-full px-7 py-3 flex items-center gap-2 font-medium text-base transform translate-y-8 group-hover:translate-y-0 transition-transform duration-700 shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:shadow-[0_0_25px_rgba(221,246,149,0.4)]">
+              <span className="relative z-10">View Details</span>
+              <ExternalLink size={18} className="relative z-10" />
+              {/* Sliding animation overlay */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
             </div>
           </div>
         </div>
@@ -136,10 +138,11 @@ export default function IdeaCard({ idea, variant = 'default' }: IdeaCardProps) {
           <span className="text-xs text-gray-300 ml-2">{idea.author.name}</span>
         </div>
         <button 
-          className="text-[#DDF695] hover:text-white text-sm font-medium"
+          className="relative text-[#DDF695] hover:text-white text-sm font-medium overflow-hidden group/btn px-3 py-1 rounded-full border border-[#DDF695]/30 hover:border-[#DDF695]/70 transition-all duration-300"
           onClick={navigateToDetail}
         >
-          Details
+          <span className="relative z-10">Details</span>
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 ease-in-out"></div>
         </button>
       </div>
     </div>

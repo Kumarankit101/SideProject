@@ -76,7 +76,9 @@ export default function DontBeShySection() {
           </p>
           
           <Button 
-            className={`bg-[#171817] text-white hover:bg-[#2a2a2a] px-12 py-8 text-xl md:text-2xl h-auto transition-all duration-300 rounded-lg shadow-2xl transform hover:scale-105 ${
+            variant="glowing"
+            size="pill"
+            className={`border-[#DDF695]/50 text-[#DDF695] shadow-[0_0_30px_rgba(221,246,149,0.4)] hover:text-white hover:border-white/70 px-12 py-8 text-xl md:text-2xl h-auto transition-all duration-500 transform hover:scale-105 ${
               animate ? 'animate-bounce-in' : 'opacity-0'
             }`}
             onClick={() => setLocation("/submit")}

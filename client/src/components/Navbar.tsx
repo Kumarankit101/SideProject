@@ -65,16 +65,19 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-6">
             <Button 
-              variant="outline" 
-              className="border-[#ccff00] text-white hover:bg-[#ccff00] hover:text-[#171817] transition-all duration-300"
+              variant="glowing" 
+              size="pill"
+              className="text-white border-white/30 hover:text-[#DDF695]"
               onClick={() => setLocation("/login")}
             >
               Log In
             </Button>
             <Button 
-              className="bg-[#ccff00] text-[#171817] font-semibold hover:bg-[#a8cc00] transition-all duration-300"
+              variant="glowing" 
+              size="pill"
+              className="border-[#DDF695]/50 text-[#DDF695] shadow-[0_0_20px_rgba(221,246,149,0.3)] hover:text-white hover:border-white/70"
               onClick={() => setLocation("/register")}
             >
               Sign Up
@@ -112,11 +115,12 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
-          <div className="pt-4 pb-3 border-t border-gray-700">
-            <div className="flex flex-col px-5 space-y-2">
+          <div className="pt-4 pb-6 border-t border-gray-700">
+            <div className="flex flex-col px-5 space-y-3">
               <Button 
-                variant="outline" 
-                className="border-[#ccff00] text-white hover:bg-[#ccff00] hover:text-[#171817] w-full transition-all duration-300"
+                variant="glowing" 
+                size="pill"
+                className="text-white border-white/30 hover:text-[#DDF695] w-full"
                 onClick={() => {
                   setLocation("/login");
                   setMobileMenuOpen(false);
@@ -125,7 +129,9 @@ export default function Navbar() {
                 Log In
               </Button>
               <Button 
-                className="bg-[#ccff00] text-[#171817] font-semibold hover:bg-[#a8cc00] w-full transition-all duration-300"
+                variant="glowing" 
+                size="pill"
+                className="border-[#DDF695]/50 text-[#DDF695] shadow-[0_0_20px_rgba(221,246,149,0.3)] hover:text-white hover:border-white/70 w-full"
                 onClick={() => {
                   setLocation("/register");
                   setMobileMenuOpen(false);
