@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { useLocation } from "wouter";
 
 export default function DontBeShySection() {
   const [_, setLocation] = useLocation();
   const [animate, setAnimate] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+  const sectionRef = useRef<HTMLElement>(null);
   
   // Trigger animation on component mount with a small delay
   useEffect(() => {
@@ -12,17 +14,50 @@ export default function DontBeShySection() {
       setAnimate(true);
     }, 500);
     
-    return () => clearTimeout(timer);
+    // Handle scroll for parallax effect
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
+
+  // Calculate transform based on scroll position
+  const calculateTransform = () => {
+    if (!sectionRef.current) return {};
+    
+    // Get section position
+    const sectionTop = sectionRef.current.getBoundingClientRect().top + window.scrollY;
+    const offset = window.scrollY - sectionTop + window.innerHeight;
+    
+    // Only start transforming when the section is about to come into view
+    if (offset < 0) return {};
+    
+    // Calculate transform values - moves section up faster than normal scroll
+    const moveUpValue = Math.min(offset * 0.5, 300); // Limit maximum movement
+    
+    return {
+      transform: `translateY(-${moveUpValue}px)`,
+    };
+  };
 
   return (
     <section 
+      ref={sectionRef}
+      id="dont-be-shy-section"
       className="relative bg-white min-h-screen w-full flex items-center justify-center overflow-hidden"
       style={{
         marginTop: '-20vh', // Pull up to overlap with the featured section
         clipPath: `polygon(0 0, 100% 8rem, 100% 100%, 0 100%)`,
         paddingTop: '12rem',
         zIndex: 30,
+        transition: 'transform 0.1s ease-out',
+        ...calculateTransform(),
       }}
     >
       {/* Main content */}
@@ -51,25 +86,39 @@ export default function DontBeShySection() {
         </div>
       </div>
       
-      {/* Decorative elements that slide in */}
+      {/* Decorative elements that slide in and have parallax effect */}
       <div 
         className={`absolute -left-36 -bottom-36 w-96 h-96 rounded-full bg-[#DDF695]/30 blur-3xl transition-all duration-1000 ${
           animate ? 'opacity-100 transform-none' : 'opacity-0 translate-x-20'
         }`}
+        style={{
+          transform: `translateY(${scrollY * 0.05}px)`, // Slower parallax for depth
+        }}
       ></div>
       <div 
         className={`absolute right-0 top-1/4 w-80 h-80 rounded-full bg-[#DDF695]/20 blur-3xl transition-all duration-1000 delay-300 ${
           animate ? 'opacity-100 transform-none' : 'opacity-0 -translate-x-20'
         }`}
+        style={{
+          transform: `translateY(${scrollY * 0.08}px)`, // Medium parallax for depth
+        }}
       ></div>
       <div 
         className={`absolute top-36 left-1/4 w-64 h-64 rounded-full bg-[#DDF695]/25 blur-3xl transition-all duration-1000 delay-500 ${
           animate ? 'opacity-100 transform-none' : 'opacity-0 translate-y-20'
         }`}
+        style={{
+          transform: `translateY(${scrollY * 0.03}px)`, // Subtle parallax for depth
+        }}
       ></div>
       
-      {/* Background patterns */}
-      <div className="absolute inset-0 opacity-5">
+      {/* Background patterns with subtle parallax */}
+      <div 
+        className="absolute inset-0 opacity-5"
+        style={{
+          transform: `translateY(${scrollY * 0.02}px)`,
+        }}
+      >
         <div className="grid grid-cols-10 h-full">
           {Array.from({ length: 100 }).map((_, i) => (
             <div key={i} className="border-[0.5px] border-gray-500"></div>
