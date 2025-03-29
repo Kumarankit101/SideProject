@@ -6,9 +6,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export default function HowItWorks() {
   const [_, setLocation] = useLocation();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const leftSideRef = useRef<HTMLDivElement>(null);
   const [activeStep, setActiveStep] = useState(0);
-  const [sectionBounds, setSectionBounds] = useState({ top: 0, bottom: 0, height: 0 });
 
   // For the progress line
   const { scrollYProgress } = useScroll({
@@ -16,121 +14,37 @@ export default function HowItWorks() {
     offset: ["start end", "end start"]
   });
 
+  // Track scroll position to update active step
   useEffect(() => {
-    const updateSectionBounds = () => {
-      if (!sectionRef.current) return;
-      
-      const rect = sectionRef.current.getBoundingClientRect();
-      const scrollTop = window.scrollY;
-      const top = rect.top + scrollTop;
-      const height = rect.height;
-      const bottom = top + height;
-      
-      setSectionBounds({ top, bottom, height });
-    };
-
-    updateSectionBounds();
-    window.addEventListener('resize', updateSectionBounds);
-    
-    return () => {
-      window.removeEventListener('resize', updateSectionBounds);
-    };
-  }, []);
-
-  // Setup the left side content and calculate section bounds
-  useEffect(() => {
-    if (!sectionRef.current) return;
-    
-    const updateSectionBounds = () => {
-      if (!sectionRef.current) return;
-      
-      const rect = sectionRef.current.getBoundingClientRect();
-      const scrollTop = window.scrollY;
-      const top = rect.top + scrollTop;
-      const height = rect.height;
-      const bottom = top + height;
-      
-      setSectionBounds({ top, bottom, height });
-    };
-
-    updateSectionBounds();
-    window.addEventListener('resize', updateSectionBounds);
-    
-    // Setup the placeholder for the fixed content
-    if (leftSideRef.current) {
-      // Force immediate layout calculation to avoid jumps
-      leftSideRef.current.getBoundingClientRect();
-    }
-    
-    return () => {
-      window.removeEventListener('resize', updateSectionBounds);
-    };
-  }, []);
-
-  // Handle scroll events to update element positions
-  useEffect(() => {
-    if (!sectionRef.current || !leftSideRef.current) return;
-
-    // Get the initial dimensions once
-    const leftSideWidth = leftSideRef.current.offsetWidth;
-    const leftSideHeight = leftSideRef.current.offsetHeight;
-    
-    // Precompute some values to avoid layout thrashing
-    const headerOffset = 80; // Approximate header height
-    
-    // Apply transition styles to the element
-    const leftSide = leftSideRef.current;
-    leftSide.style.width = `${leftSideWidth}px`;
-    leftSide.style.transition = 'transform 0.2s ease-out'; // Smooth transition for any position changes
-    
     const handleScroll = () => {
-      if (!sectionRef.current || !leftSideRef.current) return;
+      if (!sectionRef.current) return;
       
-      const scrollY = window.scrollY;
-      const { top, bottom, height } = sectionBounds;
-      const windowHeight = window.innerHeight;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const scrolledPosition = window.innerHeight - rect.top;
+      const sectionHeight = rect.height;
       
-      // Calculate the section's progress as user scrolls
-      const sectionProgress = Math.max(0, Math.min(1, (scrollY + windowHeight/2 - top) / (height - windowHeight/2)));
+      // Calculate how far we've scrolled through the section (0 to 1)
+      const scrollProgress = Math.max(0, Math.min(1, scrolledPosition / sectionHeight));
       
-      // Determine which step is active based on the progress
-      if (sectionProgress < 0.25) {
+      // Set the active step based on scroll progress
+      if (scrollProgress < 0.25) {
         setActiveStep(0);
-      } else if (sectionProgress < 0.5) {
+      } else if (scrollProgress < 0.5) {
         setActiveStep(1);
-      } else if (sectionProgress < 0.75) {
+      } else if (scrollProgress < 0.75) {
         setActiveStep(2);
       } else {
         setActiveStep(3);
       }
-      
-      // Calculate when the left side should become fixed and when it should stop
-      // We use transform instead of changing position to avoid layout recalculation
-      if (scrollY < top - headerOffset) {
-        // Before the section: position at the top
-        leftSide.style.position = 'absolute';
-        leftSide.style.top = '0px';
-        leftSide.style.transform = 'translateY(0)';
-      } else if (scrollY >= top - headerOffset && scrollY <= bottom - leftSideHeight - headerOffset) {
-        // During the section: "fixed" position using transforms
-        leftSide.style.position = 'absolute';
-        leftSide.style.top = '0px';
-        leftSide.style.transform = `translateY(${scrollY - (top - headerOffset)}px)`;
-      } else {
-        // After the section: position at the bottom
-        leftSide.style.position = 'absolute';
-        leftSide.style.top = '0px';
-        leftSide.style.transform = `translateY(${height - leftSideHeight}px)`;
-      }
     };
     
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initialize positions
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // Initialize
     
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, [sectionBounds]);
+  }, []);
 
   const steps = [
     {
@@ -162,53 +76,42 @@ export default function HowItWorks() {
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row gap-16">
-          {/* Left side (fixed once it reaches the top) */}
+          {/* Left side with sticky positioning */}
           <div className="md:w-1/2 relative">
-            {/* This outer container maintains consistent width and position */}
-            <div className="relative" style={{ minHeight: '500px' }}>
-              {/* The actual content that will be fixed */}
-              <div 
-                ref={leftSideRef} 
-                className="w-full md:max-w-md"
-                style={{ 
-                  width: '100%',
-                  maxWidth: '500px'
-                }}
-              >
-                <div className="mb-8">
-                  <h4 className="text-[#DDF695] font-medium mb-3">Our Process</h4>
-                  <h2 className="text-white text-5xl md:text-6xl font-bold leading-tight">
-                    From Idea<br />to Launch
-                  </h2>
-                </div>
+            <div className="sticky top-24 w-full md:max-w-md">
+              <div className="mb-8">
+                <h4 className="text-[#DDF695] font-medium mb-3">Our Process</h4>
+                <h2 className="text-white text-5xl md:text-6xl font-bold leading-tight">
+                  From Idea<br />to Launch
+                </h2>
+              </div>
+              
+              <p className="text-gray-400 mb-8 text-lg">
+                We've streamlined the journey from concept to reality with our proven four-week process designed to help entrepreneurs bring their ideas to life.
+              </p>
+              
+              <div className="flex gap-4 mt-12">
+                <Button
+                  variant="glowing"
+                  size="pill"
+                  className="border-[#DDF695]/50 text-[#DDF695] shadow-[0_0_30px_rgba(221,246,149,0.4)] hover:text-white hover:border-white/70"
+                  onClick={() => setLocation("/submit-idea")}
+                >
+                  Start Your Journey
+                </Button>
                 
-                <p className="text-gray-400 mb-8 text-lg">
-                  We've streamlined the journey from concept to reality with our proven four-week process designed to help entrepreneurs bring their ideas to life.
-                </p>
-                
-                <div className="flex gap-4 mt-12">
-                  <Button
-                    variant="glowing"
-                    size="pill"
-                    className="border-[#DDF695]/50 text-[#DDF695] shadow-[0_0_30px_rgba(221,246,149,0.4)] hover:text-white hover:border-white/70"
-                    onClick={() => setLocation("/submit-idea")}
-                  >
-                    Start Your Journey
-                  </Button>
-                  
-                  <Button
-                    variant="outline"
-                    className="border-white/30 text-white hover:bg-white/10"
-                    onClick={() => setLocation("/explore")}
-                  >
-                    Learn More
-                  </Button>
-                </div>
+                <Button
+                  variant="outline"
+                  className="border-white/30 text-white hover:bg-white/10"
+                  onClick={() => setLocation("/explore")}
+                >
+                  Learn More
+                </Button>
               </div>
             </div>
           </div>
           
-          {/* Right side (fixed position with steps) */}
+          {/* Right side with steps */}
           <div className="md:w-1/2 relative">
             {/* Vertical progress line */}
             <div className="absolute left-[11px] top-2 bottom-2 w-0.5 bg-gray-700"></div>
