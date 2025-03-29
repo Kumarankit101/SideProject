@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/typography";
@@ -7,23 +7,45 @@ import { Menu, X } from "lucide-react";
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [_, setLocation] = useLocation();
   
-  // Handle scroll event to add background when scrolling
+  // Store previous scroll position
+  const prevScrollY = useRef(0);
+  
+  // Handle scroll event to add background when scrolling and hide/show navbar
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
+      const currentScrollY = window.scrollY;
+      const isScrolled = currentScrollY > 10;
+      
+      // Update background style
       if (isScrolled !== scrolled) {
         setScrolled(isScrolled);
       }
+      
+      // Hide/show based on scroll direction
+      if (currentScrollY < 50) {
+        // Always show navbar at the top of the page
+        setVisible(true);
+      } else if (prevScrollY.current < currentScrollY && visible) {
+        // Scrolling down - hide navbar
+        setVisible(false);
+      } else if (prevScrollY.current > currentScrollY && !visible) {
+        // Scrolling up - show navbar
+        setVisible(true);
+      }
+      
+      // Update previous scroll position
+      prevScrollY.current = currentScrollY;
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [scrolled]);
+  }, [scrolled, visible]);
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -38,10 +60,14 @@ export default function Navbar() {
 
   return (
     <header 
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed w-full z-50 transition-all duration-500 ${
         scrolled 
           ? "bg-[#171817]/80 backdrop-blur-md shadow-lg" 
           : "bg-transparent"
+      } ${
+        visible 
+          ? "top-0" 
+          : "-top-24"
       }`}
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
