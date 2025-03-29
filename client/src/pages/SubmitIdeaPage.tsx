@@ -114,158 +114,176 @@ export default function SubmitIdeaPage() {
   };
   
   return (
-    <div className="py-16">
+    <div className="py-16 bg-[#171817] min-h-screen">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <H2>Submit Your Idea</H2>
-            <Paragraph className="max-w-2xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Submit Your Idea</h2>
+            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
               Share your side project concept with our community and find collaborators, feedback, and support.
-            </Paragraph>
+            </p>
           </div>
           
-          <Card>
-            <CardContent className="pt-6">
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  {/* Title */}
-                  <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-lg font-medium">Idea Title</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter a catchy title for your idea" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  {/* Description */}
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-lg font-medium">Description</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="Describe your idea in detail. What problem does it solve? Who is it for?" 
-                            className="min-h-32"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  {/* Image URL */}
-                  <FormField
-                    control={form.control}
-                    name="image"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-lg font-medium">Image URL (Optional)</FormLabel>
-                        <div className="flex items-center gap-2">
-                          <FormControl>
-                            <Input placeholder="https://example.com/your-image.jpg" {...field} />
-                          </FormControl>
-                          <FileImage className="h-5 w-5 text-gray-400" />
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  {/* Tags */}
-                  <div>
-                    <FormLabel className="text-lg font-medium">Tags</FormLabel>
-                    <div className="mb-2">
-                      <p className="text-sm text-neutral-500">
-                        Select from popular tags or create your own
-                      </p>
-                    </div>
-                    
-                    {/* Popular tags */}
-                    <div className="flex flex-wrap gap-2 mb-4">
-                      {popularTags.map(tag => (
-                        <Badge 
-                          key={tag}
-                          variant={tags.includes(tag) ? "default" : "outline"}
-                          className={`cursor-pointer ${
-                            tags.includes(tag) 
-                              ? 'bg-primary text-white hover:bg-primary-dark' 
-                              : 'hover:bg-primary hover:text-white'
-                          }`}
-                          onClick={() => tags.includes(tag) ? removeTag(tag) : addTag(tag)}
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    
-                    {/* Custom tag input */}
-                    <div className="flex items-center gap-2 mb-2">
-                      <Input
-                        placeholder="Add a custom tag..."
-                        value={newTag}
-                        onChange={handleNewTagChange}
-                        onKeyPress={handleNewTagKeyPress}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              {/* Title */}
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-lg font-medium text-white">Name</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Enter a catchy title for your idea" 
+                        {...field} 
+                        className="bg-[#444444] border-none text-white h-14 rounded-sm focus-visible:ring-[#DDF695] focus-visible:ring-offset-[#171817]"
                       />
-                      <Button 
-                        type="button"
-                        variant="outline"
-                        onClick={() => addTag(newTag)}
-                        disabled={!newTag}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
+                    </FormControl>
+                    <FormMessage className="text-[#ff6b6b]" />
+                  </FormItem>
+                )}
+              />
+              
+              {/* Description */}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-lg font-medium text-white">Description</FormLabel>
+                    <FormControl>
+                      <Textarea 
+                        placeholder="Describe your idea in detail. What problem does it solve? Who is it for?" 
+                        className="min-h-48 bg-[#444444] border-none text-white rounded-sm focus-visible:ring-[#DDF695] focus-visible:ring-offset-[#171817]"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage className="text-[#ff6b6b]" />
+                  </FormItem>
+                )}
+              />
+              
+              {/* Image URL */}
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-lg font-medium text-white">Image URL (Optional)</FormLabel>
+                    <div className="flex items-center gap-2">
+                      <FormControl>
+                        <Input 
+                          placeholder="https://example.com/your-image.jpg" 
+                          {...field} 
+                          className="bg-[#444444] border-none text-white h-14 rounded-sm focus-visible:ring-[#DDF695] focus-visible:ring-offset-[#171817]"
+                        />
+                      </FormControl>
+                      <FileImage className="h-5 w-5 text-gray-400" />
                     </div>
-                    
-                    {/* Selected tags */}
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {tags.map(tag => (
-                        <Badge key={tag} className="bg-primary text-white flex items-center gap-1">
-                          {tag}
-                          <X 
-                            className="h-3 w-3 cursor-pointer hover:text-gray-200" 
-                            onClick={() => removeTag(tag)}
-                          />
-                        </Badge>
-                      ))}
-                    </div>
-                    
-                    {form.formState.errors.tags && (
-                      <p className="text-sm font-medium text-red-500 mt-2">
-                        {form.formState.errors.tags.message}
-                      </p>
-                    )}
-                  </div>
-                  
-                  {/* Submit button */}
-                  <div className="pt-4">
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-[#ccff00] text-primary font-semibold hover:bg-[#a8cc00] py-6"
-                      disabled={mutation.isPending}
+                    <FormMessage className="text-[#ff6b6b]" />
+                  </FormItem>
+                )}
+              />
+              
+              {/* Tags */}
+              <div>
+                <FormLabel className="text-lg font-medium text-white">Tags</FormLabel>
+                <div className="mb-2">
+                  <p className="text-sm text-gray-400">
+                    Select from popular tags or create your own
+                  </p>
+                </div>
+                
+                {/* Popular tags */}
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {popularTags.map(tag => (
+                    <Badge 
+                      key={tag}
+                      variant="outline"
+                      className={`cursor-pointer transition-all duration-300 ${
+                        tags.includes(tag) 
+                          ? 'bg-[#DDF695] text-[#171817] hover:bg-[#DDF695]/80 border-[#DDF695]' 
+                          : 'text-white hover:bg-white/10 border-white/30'
+                      }`}
+                      onClick={() => tags.includes(tag) ? removeTag(tag) : addTag(tag)}
                     >
-                      {mutation.isPending ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Submitting...
-                        </>
-                      ) : (
-                        "Submit Your Idea"
-                      )}
-                    </Button>
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+                
+                {/* Custom tag input */}
+                <div className="flex items-center gap-2 mb-2">
+                  <Input
+                    placeholder="Add a custom tag..."
+                    value={newTag}
+                    onChange={handleNewTagChange}
+                    onKeyPress={handleNewTagKeyPress}
+                    className="bg-[#444444] border-none text-white h-12 rounded-sm focus-visible:ring-[#DDF695] focus-visible:ring-offset-[#171817]"
+                  />
+                  <Button 
+                    type="button"
+                    variant="glowing"
+                    onClick={() => addTag(newTag)}
+                    disabled={!newTag}
+                    className="border-white/30 h-12 px-4"
+                  >
+                    <Plus className="h-5 w-5" />
+                  </Button>
+                </div>
+                
+                {/* Selected tags */}
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {tags.map(tag => (
+                    <Badge key={tag} className="bg-[#DDF695] text-[#171817] flex items-center gap-1">
+                      {tag}
+                      <X 
+                        className="h-3 w-3 cursor-pointer hover:text-gray-600" 
+                        onClick={() => removeTag(tag)}
+                      />
+                    </Badge>
+                  ))}
+                </div>
+                
+                {form.formState.errors.tags && (
+                  <p className="text-sm font-medium text-[#ff6b6b] mt-2">
+                    {form.formState.errors.tags.message}
+                  </p>
+                )}
+              </div>
+              
+              {/* Success message (similar to the image) */}
+              {false && (
+                <div className="flex items-center gap-2 p-4 bg-[#333333] rounded-md border border-[#444444]">
+                  <div className="bg-[#DDF695] rounded-full p-1">
+                    <X className="h-5 w-5 text-[#171817]" />
                   </div>
-                </form>
-              </Form>
-            </CardContent>
-          </Card>
+                  <span className="text-white">Success!</span>
+                </div>
+              )}
+              
+              {/* Submit button */}
+              <div className="pt-6">
+                <Button 
+                  type="submit" 
+                  variant="glowing"
+                  size="pill"
+                  className="w-full border-[#DDF695]/50 text-[#DDF695] shadow-[0_0_30px_rgba(221,246,149,0.4)] hover:text-white hover:border-white/70 transition-all duration-500 text-lg py-6 h-auto"
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending ? (
+                    <>
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Submit"
+                  )}
+                </Button>
+              </div>
+            </form>
+          </Form>
         </div>
       </div>
     </div>

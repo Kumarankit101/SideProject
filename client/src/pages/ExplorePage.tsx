@@ -73,22 +73,42 @@ export default function ExplorePage() {
               </p>
             </div>
             
-            {/* Search input */}
-            <div className="relative w-full md:w-auto md:min-w-[320px]">
-              <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <Input
-                type="text"
-                placeholder="Search ideas..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="pl-10 py-6 bg-[#232323] border-[#3A3A3A] text-white placeholder-gray-500 w-full"
-              />
+            {/* Search and filter component */}
+            <div className="relative w-full md:w-auto md:min-w-[350px]">
+              <div className="flex items-center gap-3">
+                <div className="relative flex-1">
+                  <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Input
+                    type="text"
+                    placeholder="Search ideas..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="pl-10 py-6 bg-[#232323] border-[#3A3A3A] text-white placeholder-gray-500 w-full"
+                  />
+                </div>
+                
+                <Button 
+                  variant="glowing"
+                  size="icon"
+                  className="h-14 w-14 border-white/30 hover:border-[#DDF695]/70"
+                  onClick={() => {
+                    if (searchQuery) {
+                      setDebouncedQuery(searchQuery);
+                    }
+                  }}
+                >
+                  <SearchIcon className="h-5 w-5" />
+                </Button>
+              </div>
             </div>
           </div>
           
           {/* Filters section */}
           <div className="mt-8 flex flex-wrap items-center gap-3">
-            <span className="text-gray-400 mr-2">Filter:</span>
+            <div className="flex items-center gap-2 mr-2">
+              <FilterIcon className="h-4 w-4 text-gray-400" />
+              <span className="text-gray-400">Filter:</span>
+            </div>
             
             {popularTags.map(tag => (
               <Badge 
@@ -107,12 +127,13 @@ export default function ExplorePage() {
             
             {(debouncedQuery || selectedTags.length > 0) && (
               <Button 
-                variant="ghost" 
+                variant="glowing"
+                size="sm"
                 onClick={clearFilters}
-                className="text-gray-400 hover:text-white hover:bg-white/10"
+                className="text-white border-white/30 hover:border-[#DDF695]/70 ml-2"
               >
                 <X className="mr-2 h-4 w-4" />
-                Clear
+                Clear Filters
               </Button>
             )}
           </div>
@@ -123,7 +144,7 @@ export default function ExplorePage() {
           // Loading state
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {Array(6).fill(0).map((_, index) => (
-              <div key={index} className="aspect-[4/5] animate-pulse bg-[#232323] rounded-md"></div>
+              <div key={index} className="aspect-[16/9] animate-pulse bg-[#232323] rounded-md"></div>
             ))}
           </div>
         ) : ideas?.length ? (

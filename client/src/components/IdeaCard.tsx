@@ -28,7 +28,7 @@ export default function IdeaCard({ idea, variant = 'default' }: IdeaCardProps) {
         onClick={navigateToDetail}
       >
         {/* Main image with overlay */}
-        <div className="aspect-[4/5] w-full relative overflow-hidden">
+        <div className="aspect-[16/9] w-full relative overflow-hidden">
           <img 
             src={idea.image || "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&q=80"} 
             alt={idea.title}
