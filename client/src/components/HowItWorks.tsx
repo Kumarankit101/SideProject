@@ -40,6 +40,14 @@ export default function HowItWorks() {
   useEffect(() => {
     if (!sectionRef.current || !leftSideRef.current) return;
 
+    // Capture the initial width of the left side content for consistent sizing
+    const leftSideWidth = leftSideRef.current.offsetWidth;
+    
+    // Apply the consistent width right away
+    if (leftSideRef.current) {
+      leftSideRef.current.style.width = `${leftSideWidth}px`;
+    }
+
     const handleScroll = () => {
       if (!sectionRef.current || !leftSideRef.current) return;
       
@@ -70,15 +78,17 @@ export default function HowItWorks() {
         // Before the section: position static
         leftSide.style.position = 'relative';
         leftSide.style.top = '0px';
+        leftSide.style.width = `${leftSideWidth}px`; // Keep consistent width
       } else if (scrollY >= top - headerOffset && scrollY <= bottom - leftSideHeight - headerOffset) {
         // During the section: position fixed
         leftSide.style.position = 'fixed';
         leftSide.style.top = `${headerOffset}px`;
-        leftSide.style.width = ''; // Let the parent control the width
+        leftSide.style.width = `${leftSideWidth}px`; // Keep consistent width
       } else {
         // After the section: position absolute at the bottom
         leftSide.style.position = 'absolute';
         leftSide.style.top = `${height - leftSideHeight}px`;
+        leftSide.style.width = `${leftSideWidth}px`; // Keep consistent width
       }
     };
     
@@ -122,35 +132,46 @@ export default function HowItWorks() {
         <div className="flex flex-col md:flex-row gap-16">
           {/* Left side (fixed once it reaches the top) */}
           <div className="md:w-1/2 relative">
-            <div ref={leftSideRef} className="w-full md:w-[calc(50%-32px)]">
-              <div className="mb-8">
-                <h4 className="text-[#DDF695] font-medium mb-3">Our Process</h4>
-                <h2 className="text-white text-5xl md:text-6xl font-bold leading-tight">
-                  From Idea<br />to Launch
-                </h2>
-              </div>
-              
-              <p className="text-gray-400 mb-8 text-lg max-w-md">
-                We've streamlined the journey from concept to reality with our proven four-week process designed to help entrepreneurs bring their ideas to life.
-              </p>
-              
-              <div className="flex gap-4 mt-12">
-                <Button
-                  variant="glowing"
-                  size="pill"
-                  className="border-[#DDF695]/50 text-[#DDF695] shadow-[0_0_30px_rgba(221,246,149,0.4)] hover:text-white hover:border-white/70"
-                  onClick={() => setLocation("/submit-idea")}
-                >
-                  Start Your Journey
-                </Button>
+            {/* This outer container maintains consistent width and position */}
+            <div className="relative" style={{ minHeight: '500px' }}>
+              {/* The actual content that will be fixed */}
+              <div 
+                ref={leftSideRef} 
+                className="w-full md:max-w-md"
+                style={{ 
+                  width: '100%',
+                  maxWidth: '500px'
+                }}
+              >
+                <div className="mb-8">
+                  <h4 className="text-[#DDF695] font-medium mb-3">Our Process</h4>
+                  <h2 className="text-white text-5xl md:text-6xl font-bold leading-tight">
+                    From Idea<br />to Launch
+                  </h2>
+                </div>
                 
-                <Button
-                  variant="outline"
-                  className="border-white/30 text-white hover:bg-white/10"
-                  onClick={() => setLocation("/explore")}
-                >
-                  Learn More
-                </Button>
+                <p className="text-gray-400 mb-8 text-lg">
+                  We've streamlined the journey from concept to reality with our proven four-week process designed to help entrepreneurs bring their ideas to life.
+                </p>
+                
+                <div className="flex gap-4 mt-12">
+                  <Button
+                    variant="glowing"
+                    size="pill"
+                    className="border-[#DDF695]/50 text-[#DDF695] shadow-[0_0_30px_rgba(221,246,149,0.4)] hover:text-white hover:border-white/70"
+                    onClick={() => setLocation("/submit-idea")}
+                  >
+                    Start Your Journey
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    className="border-white/30 text-white hover:bg-white/10"
+                    onClick={() => setLocation("/explore")}
+                  >
+                    Learn More
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
