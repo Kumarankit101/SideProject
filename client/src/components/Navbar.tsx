@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/typography";
@@ -6,8 +6,25 @@ import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [_, setLocation] = useLocation();
   
+  // Handle scroll event to add background when scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrolled]);
+
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
@@ -20,9 +37,15 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
+    <header 
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        scrolled 
+          ? "bg-[#171817]/80 backdrop-blur-md shadow-lg" 
+          : "bg-transparent"
+      }`}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           <div className="flex items-center">
             <Link href="/">
               <a className="flex items-center">
@@ -35,7 +58,7 @@ export default function Navbar() {
           <nav className="hidden md:flex space-x-8">
             {navLinks.map((link) => (
               <Link href={link.href} key={link.name}>
-                <a className="relative text-neutral-700 hover:text-primary font-medium transition-colors duration-200 after:content-[''] after:block after:w-0 after:h-0.5 after:bg-[#ccff00] after:transition-all after:duration-300 hover:after:w-full">
+                <a className="relative text-white hover:text-[#ccff00] font-medium transition-colors duration-300 after:content-[''] after:block after:w-0 after:h-0.5 after:bg-[#ccff00] after:transition-all after:duration-300 hover:after:w-full">
                   {link.name}
                 </a>
               </Link>
@@ -45,13 +68,13 @@ export default function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             <Button 
               variant="outline" 
-              className="border-primary text-primary hover:bg-primary hover:text-white"
+              className="border-[#ccff00] text-white hover:bg-[#ccff00] hover:text-[#171817] transition-all duration-300"
               onClick={() => setLocation("/login")}
             >
               Log In
             </Button>
             <Button 
-              className="bg-[#ccff00] text-primary font-semibold hover:bg-[#a8cc00]"
+              className="bg-[#ccff00] text-[#171817] font-semibold hover:bg-[#a8cc00] transition-all duration-300"
               onClick={() => setLocation("/register")}
             >
               Sign Up
@@ -61,7 +84,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button 
-              className="text-gray-500 hover:text-primary focus:outline-none"
+              className="text-white hover:text-[#ccff00] focus:outline-none transition-colors duration-300"
               onClick={toggleMobileMenu}
             >
               {mobileMenuOpen ? (
@@ -76,12 +99,12 @@ export default function Navbar() {
       
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white shadow-lg">
+        <div className="md:hidden bg-[#171817]/95 backdrop-blur-md shadow-lg">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link) => (
               <Link href={link.href} key={link.name}>
                 <a 
-                  className="block px-3 py-2 rounded-md text-base font-medium text-neutral-700 hover:bg-neutral-100 hover:text-primary"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-[#2a2a2a] hover:text-[#ccff00] transition-colors duration-300"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.name}
@@ -89,11 +112,11 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
-          <div className="pt-4 pb-3 border-t border-gray-200">
+          <div className="pt-4 pb-3 border-t border-gray-700">
             <div className="flex flex-col px-5 space-y-2">
               <Button 
                 variant="outline" 
-                className="border-primary text-primary hover:bg-primary hover:text-white w-full"
+                className="border-[#ccff00] text-white hover:bg-[#ccff00] hover:text-[#171817] w-full transition-all duration-300"
                 onClick={() => {
                   setLocation("/login");
                   setMobileMenuOpen(false);
@@ -102,7 +125,7 @@ export default function Navbar() {
                 Log In
               </Button>
               <Button 
-                className="bg-[#ccff00] text-primary font-semibold hover:bg-[#a8cc00] w-full"
+                className="bg-[#ccff00] text-[#171817] font-semibold hover:bg-[#a8cc00] w-full transition-all duration-300"
                 onClick={() => {
                   setLocation("/register");
                   setMobileMenuOpen(false);
