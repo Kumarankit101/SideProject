@@ -7,8 +7,7 @@
       "config": {
         "typescript": {
           "ignoreBuildErrors": true
-        },
-        "nodeVersion": "20.16.0"
+        }
       }
     },
     {
@@ -22,11 +21,14 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "index.js"
+      "dest": "/api/$1"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
-      "dest": "dist/public/index.html"
+      "dest": "index.html"
     }
   ]
 }
