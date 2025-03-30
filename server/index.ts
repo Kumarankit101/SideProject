@@ -70,3 +70,4 @@ app.use((req, res, next) => {
 })();
 
 export default app;
+export const handler = app;
