@@ -54,7 +54,7 @@ export default function HomePage() {
       <WhyChooseUsSection />
 
       <Testimonials />
-      <CallToAction />
+      {/* <CallToAction /> */}
       <InvestorsSection />
     </>
   );
