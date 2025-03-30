@@ -7,16 +7,17 @@
       "config": {
         "typescript": {
           "ignoreBuildErrors": true
-        }
+        },
+        "nodeVersion": "20.16.0"
       }
     },
     {
-       "src": "package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "dist/public"
-        }
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/public"
       }
+    }
   ],
   "routes": [
     {
