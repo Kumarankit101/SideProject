@@ -12,13 +12,16 @@ export default function HeroSection() {
         <div className="flex flex-col lg:flex-row items-center">
           <div className="lg:w-1/2 mb-10 lg:mb-0">
             <H1 className="mb-4">
-              Bring Your <span className="text-[#ccff00]">Side Project</span> To Life
+              Bring Your <span className="text-[#ccff00]">Side Project</span> To
+              Life
             </H1>
             <Paragraph className="text-lg mb-8 max-w-lg">
-              Join our community to share ideas, find collaborators, and turn your side projects into reality with support from like-minded entrepreneurs.
+              Join our community to share ideas, find collaborators, and turn
+              your side projects into reality with support from like-minded
+              entrepreneurs.
             </Paragraph>
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-              <Button 
+              <Button
                 className="px-6 py-6 bg-[#ccff00] text-primary font-semibold hover:bg-[#a8cc00] shadow-md"
                 onClick={() => setLocation("/submit")}
               >
@@ -34,9 +37,9 @@ export default function HeroSection() {
             </div>
           </div>
           <div className="lg:w-1/2 relative animate-bounce-slow">
-            <img 
-              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-              alt="Diverse entrepreneurs collaborating" 
+            <img
+              src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+              alt="Diverse entrepreneurs collaborating"
               className="rounded-lg shadow-2xl w-full h-auto"
             />
           </div>

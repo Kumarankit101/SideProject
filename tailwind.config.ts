@@ -61,6 +61,7 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        newlime: 'var(--color-newlime)',
       },
       keyframes: {
         "accordion-down": {

@@ -35,7 +35,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-primary text-white pt-16 pb-8">
+    <footer className="bg-black text-white pt-16 pb-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
@@ -47,24 +47,26 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               {socialLinks.map(({ Icon, href }, index) => (
-                <a 
+                <a
                   key={index}
-                  href={href} 
-                  className="text-white hover:text-[#ccff00] transition-colors duration-200"
+                  href={href}
+                  className="text-white hover:text-newlime transition-colors duration-200"
                 >
                   <Icon className="h-5 w-5" />
                 </a>
               ))}
             </div>
           </div>
-          
+
           <div>
-            <h3 className="font-montserrat font-semibold text-lg mb-4">Platform</h3>
+            <h3 className="font-montserrat font-semibold text-lg mb-4">
+              Platform
+            </h3>
             <ul className="space-y-3">
               {platformLinks.map((link) => (
                 <li key={link.name}>
                   <Link href={link.href}>
-                    <a className="text-neutral-300 hover:text-[#ccff00] transition-colors duration-200">
+                    <a className="text-neutral-300 hover:text-newlime transition-colors duration-200">
                       {link.name}
                     </a>
                   </Link>
@@ -72,14 +74,16 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="font-montserrat font-semibold text-lg mb-4">Resources</h3>
+            <h3 className="font-montserrat font-semibold text-lg mb-4">
+              Resources
+            </h3>
             <ul className="space-y-3">
               {resourceLinks.map((link) => (
                 <li key={link.name}>
                   <Link href={link.href}>
-                    <a className="text-neutral-300 hover:text-[#ccff00] transition-colors duration-200">
+                    <a className="text-neutral-300 hover:text-newlime transition-colors duration-200">
                       {link.name}
                     </a>
                   </Link>
@@ -87,14 +91,16 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-          
+
           <div>
-            <h3 className="font-montserrat font-semibold text-lg mb-4">Company</h3>
+            <h3 className="font-montserrat font-semibold text-lg mb-4">
+              Company
+            </h3>
             <ul className="space-y-3">
               {companyLinks.map((link) => (
                 <li key={link.name}>
                   <Link href={link.href}>
-                    <a className="text-neutral-300 hover:text-[#ccff00] transition-colors duration-200">
+                    <a className="text-neutral-300 hover:text-newlime transition-colors duration-200">
                       {link.name}
                     </a>
                   </Link>
@@ -103,20 +109,30 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        
-        <div className="border-t border-blue-800 pt-8 mt-8">
+
+        <div className="border-t border-newlime pt-8 mt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-neutral-400 text-sm mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} SideProject.com. All rights reserved.
+              &copy; {new Date().getFullYear()} SideProject.com. All rights
+              reserved.
             </p>
             <div className="flex space-x-6">
-              <a href="#" className="text-neutral-400 hover:text-[#ccff00] text-sm transition-colors duration-200">
+              <a
+                href="#"
+                className="text-neutral-400 hover:text-newlime text-sm transition-colors duration-200"
+              >
                 Terms of Service
               </a>
-              <a href="#" className="text-neutral-400 hover:text-[#ccff00] text-sm transition-colors duration-200">
+              <a
+                href="#"
+                className="text-neutral-400 hover:text-newlime text-sm transition-colors duration-200"
+              >
                 Privacy Policy
               </a>
-              <a href="#" className="text-neutral-400 hover:text-[#ccff00] text-sm transition-colors duration-200">
+              <a
+                href="#"
+                className="text-neutral-400 hover:text-newlime text-sm transition-colors duration-200"
+              >
                 Cookie Policy
               </a>
             </div>

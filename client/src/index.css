@@ -7,11 +7,25 @@
     @apply border-border;
   }
 
+  @font-face {
+    font-family: myfont;
+    src: url("/public/fonts/AktivGrotesk_Trial_Th.ttf");
+}
+
   body {
     @apply font-sans antialiased text-foreground;
     background-color: #171817;
     color: white;
+    font-family: myfont, sans-serif;
   }
+}
+
+
+@layer base {
+  :root {
+    --color-newlime: #DDF695;
+  }
+  /* ... rest of your existing base styles ... */
 }
 
 @layer utilities {
