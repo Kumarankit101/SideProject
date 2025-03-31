@@ -4,32 +4,49 @@ import { useParams, useLocation } from "wouter";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { H2, Paragraph } from "@/components/ui/typography";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { PlusIcon, MessageSquare, Share2, ThumbsUp, UserPlus, Loader2 } from "lucide-react";
+import {
+  PlusIcon,
+  MessageSquare,
+  Share2,
+  ThumbsUp,
+  UserPlus,
+  Loader2,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import type { IdeaDetail } from "@shared/schema";
 
 export default function IdeaDetailPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [_, setLocation] = useLocation();
   const { toast } = useToast();
   const [comment, setComment] = useState("");
-  
+
   // Get idea details
-  const { data: idea, isLoading, isError } = useQuery<IdeaDetail>({
+  const {
+    data: idea,
+    isLoading,
+    isError,
+  } = useQuery<IdeaDetail>({
     queryKey: [`/api/ideas/${id}`],
+    enabled: !!id,
   });
-  
+
   // Add vote mutation
   const voteMutation = useMutation({
     mutationFn: async () => {
       const res = await apiRequest("POST", "/api/votes", {
         ideaId: parseInt(id),
-        userId: 1 // Hardcoded for demo
+        userId: 1, // Hardcoded for demo
       });
       return await res.json();
     },
@@ -46,16 +63,16 @@ export default function IdeaDetailPage() {
         description: `Failed to vote: ${error.message}`,
         variant: "destructive",
       });
-    }
+    },
   });
-  
+
   // Add comment mutation
   const commentMutation = useMutation({
     mutationFn: async () => {
       const res = await apiRequest("POST", "/api/comments", {
         ideaId: parseInt(id),
         userId: 1, // Hardcoded for demo
-        content: comment
+        content: comment,
       });
       return await res.json();
     },
@@ -73,9 +90,9 @@ export default function IdeaDetailPage() {
         description: `Failed to add comment: ${error.message}`,
         variant: "destructive",
       });
-    }
+    },
   });
-  
+
   // Add collaboration request mutation
   const collaborationMutation = useMutation({
     mutationFn: async () => {
@@ -83,7 +100,7 @@ export default function IdeaDetailPage() {
         ideaId: parseInt(id),
         userId: 1, // Hardcoded for demo
         status: "pending",
-        message: "I'm interested in collaborating on this project!"
+        message: "I'm interested in collaborating on this project!",
       });
       return await res.json();
     },
@@ -99,14 +116,14 @@ export default function IdeaDetailPage() {
         description: `Failed to send request: ${error.message}`,
         variant: "destructive",
       });
-    }
+    },
   });
-  
+
   // Handle voting
   const handleVote = () => {
     voteMutation.mutate();
   };
-  
+
   // Handle comment submission
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,12 +131,12 @@ export default function IdeaDetailPage() {
       commentMutation.mutate();
     }
   };
-  
+
   // Handle collaboration request
   const handleCollaborationRequest = () => {
     collaborationMutation.mutate();
   };
-  
+
   // Loading state
   if (isLoading) {
     return (
@@ -134,18 +151,17 @@ export default function IdeaDetailPage() {
       </div>
     );
   }
-  
+
   // Error state
   if (isError || !idea) {
     return (
       <div className="py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <H2>Idea Not Found</H2>
-          <Paragraph>The idea you're looking for doesn't exist or has been removed.</Paragraph>
-          <Button 
-            onClick={() => setLocation("/explore")}
-            className="mt-4"
-          >
+          <Paragraph>
+            The idea you're looking for doesn't exist or has been removed.
+          </Paragraph>
+          <Button onClick={() => setLocation("/explore")} className="mt-4">
             Browse Ideas
           </Button>
         </div>
@@ -164,8 +180,8 @@ export default function IdeaDetailPage() {
                 <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
                   <H2 className="mb-0">{idea.title}</H2>
                   <div className="flex items-center gap-2">
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       className="flex items-center gap-1"
                       onClick={handleVote}
@@ -178,8 +194,8 @@ export default function IdeaDetailPage() {
                       )}
                       {idea.votes}
                     </Button>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="sm"
                       className="flex items-center gap-1"
                     >
@@ -190,7 +206,11 @@ export default function IdeaDetailPage() {
                 </div>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {idea.tags.map((tag, index) => (
-                    <Badge key={index} variant="outline" className="bg-primary bg-opacity-10 text-primary">
+                    <Badge
+                      key={index}
+                      variant="outline"
+                      className="bg-primary bg-opacity-10 text-primary"
+                    >
                       {tag}
                     </Badge>
                   ))}
@@ -199,22 +219,29 @@ export default function IdeaDetailPage() {
               <CardContent>
                 <div className="mb-6">
                   {idea.image && (
-                    <img 
-                      src={idea.image} 
-                      alt={idea.title} 
+                    <img
+                      src={idea.image}
+                      alt={idea.title}
                       className="w-full h-auto rounded-lg mb-4"
                     />
                   )}
                   <Paragraph>{idea.description}</Paragraph>
                 </div>
-                
+
                 <div className="flex items-center gap-2 mb-6">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={idea.author.avatar} alt={idea.author.name} />
-                    <AvatarFallback>{idea.author.name.substring(0, 2)}</AvatarFallback>
+                    <AvatarImage
+                      src={idea.author.avatar}
+                      alt={idea.author.name}
+                    />
+                    <AvatarFallback>
+                      {idea.author.name.substring(0, 2)}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm font-medium">Posted by {idea.author.name}</p>
+                    <p className="text-sm font-medium">
+                      Posted by {idea.author.name}
+                    </p>
                     <p className="text-xs text-gray-500">
                       {new Date(idea.createdAt).toLocaleDateString()}
                     </p>
@@ -222,7 +249,7 @@ export default function IdeaDetailPage() {
                 </div>
               </CardContent>
             </Card>
-            
+
             {/* Comments Section */}
             <Card>
               <CardHeader>
@@ -242,8 +269,8 @@ export default function IdeaDetailPage() {
                     onChange={(e) => setComment(e.target.value)}
                     className="mb-2"
                   />
-                  <Button 
-                    type="submit" 
+                  <Button
+                    type="submit"
                     className="bg-primary text-white"
                     disabled={commentMutation.isPending || !comment.trim()}
                   >
@@ -257,27 +284,41 @@ export default function IdeaDetailPage() {
                     )}
                   </Button>
                 </form>
-                
+
                 {/* Comments List */}
                 {idea.comments.length === 0 ? (
                   <div className="text-center py-8">
                     <MessageSquare className="h-12 w-12 mx-auto text-gray-400 mb-2" />
-                    <p className="text-gray-500">Be the first to comment on this idea!</p>
+                    <p className="text-gray-500">
+                      Be the first to comment on this idea!
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {idea.comments.map((comment) => (
-                      <div key={comment.id} className="border-b pb-4 last:border-0">
+                      <div
+                        key={comment.id}
+                        className="border-b pb-4 last:border-0"
+                      >
                         <div className="flex items-start gap-3">
                           <Avatar className="h-8 w-8">
-                            <AvatarImage src={comment.author.avatar} alt={comment.author.name} />
-                            <AvatarFallback>{comment.author.name.substring(0, 2)}</AvatarFallback>
+                            <AvatarImage
+                              src={comment.author.avatar}
+                              alt={comment.author.name}
+                            />
+                            <AvatarFallback>
+                              {comment.author.name.substring(0, 2)}
+                            </AvatarFallback>
                           </Avatar>
                           <div className="flex-1">
                             <div className="flex justify-between items-center">
-                              <p className="font-medium text-sm">{comment.author.name}</p>
+                              <p className="font-medium text-sm">
+                                {comment.author.name}
+                              </p>
                               <p className="text-xs text-gray-500">
-                                {new Date(comment.createdAt).toLocaleDateString()}
+                                {new Date(
+                                  comment.createdAt
+                                ).toLocaleDateString()}
                               </p>
                             </div>
                             <p className="text-sm mt-1">{comment.content}</p>
@@ -290,7 +331,7 @@ export default function IdeaDetailPage() {
               </CardContent>
             </Card>
           </div>
-          
+
           {/* Sidebar */}
           <div>
             {/* Collaboration */}
@@ -303,9 +344,10 @@ export default function IdeaDetailPage() {
               </CardHeader>
               <CardContent>
                 <Paragraph className="mb-4">
-                  Interested in working on this project? Send a collaboration request to the author.
+                  Interested in working on this project? Send a collaboration
+                  request to the author.
                 </Paragraph>
-                <Button 
+                <Button
                   className="w-full bg-[#ccff00] text-primary font-semibold hover:bg-[#a8cc00]"
                   onClick={handleCollaborationRequest}
                   disabled={collaborationMutation.isPending}
@@ -321,7 +363,7 @@ export default function IdeaDetailPage() {
                 </Button>
               </CardContent>
             </Card>
-            
+
             {/* Similar Ideas */}
             <Card>
               <CardHeader>
@@ -331,8 +373,8 @@ export default function IdeaDetailPage() {
                 <p className="text-sm text-gray-500">
                   Explore more ideas related to {idea.tags[0]}
                 </p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full"
                   onClick={() => setLocation(`/explore?tags=${idea.tags[0]}`)}
                 >
